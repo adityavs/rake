@@ -1,5 +1,6 @@
-require 'rake'
-require 'rake/tasklib'
+# frozen_string_literal: true
+require "rake"
+require "rake/tasklib"
 
 module Rake
 
@@ -50,6 +51,7 @@ module Rake
 
     # Request that the tests be run with the warning flag set.
     # E.g. warning=true implies "ruby -w" used to run the tests.
+    # (default is true)
     attr_accessor :warning
 
     # Glob pattern to match test files. (default is 'test/test*.rb')
@@ -93,8 +95,12 @@ module Rake
       @ruby_opts = []
       @description = "Run tests" + (@name == :test ? "" : " for #{@name}")
       @deps = []
+      if @name.is_a?(Hash)
+        @deps = @name.values.first
+        @name = @name.keys.first
+      end
       yield self if block_given?
-      @pattern = 'test/test*.rb' if @pattern.nil? && @test_files.nil?
+      @pattern = "test/test*.rb" if @pattern.nil? && @test_files.nil?
       define
     end
 
@@ -103,6 +109,8 @@ module Rake
       desc @description
       task @name => Array(deps) do
         FileUtilsExt.verbose(@verbose) do
+          puts "Use TESTOPTS=\"--verbose\" to pass --verbose" \
+            ", etc. to runners." if ARGV.include? "--verbose"
           args =
             "#{ruby_opts_string} #{run_code} " +
             "#{file_list_string} #{option_list}"
@@ -110,8 +118,16 @@ module Rake
             if !ok && status.respond_to?(:signaled?) && status.signaled?
               raise SignalException.new(status.termsig)
             elsif !ok
-              fail "Command failed with status (#{status.exitstatus}): " +
-                "[ruby #{args}]"
+              status  = "Command failed with status (#{status.exitstatus})"
+              details = ": [ruby #{args}]"
+              message =
+                if Rake.application.options.trace or @verbose
+                  status + details
+                else
+                  status
+                end
+
+              fail message
             end
           end
         end
@@ -120,10 +136,10 @@ module Rake
     end
 
     def option_list # :nodoc:
-      (ENV['TESTOPTS'] ||
-        ENV['TESTOPT'] ||
-        ENV['TEST_OPTS'] ||
-        ENV['TEST_OPT'] ||
+      (ENV["TESTOPTS"] ||
+        ENV["TESTOPT"] ||
+        ENV["TEST_OPTS"] ||
+        ENV["TEST_OPT"] ||
         @options ||
         "")
     end
@@ -140,16 +156,16 @@ module Rake
     end
 
     def file_list_string # :nodoc:
-      file_list.map { |fn| "\"#{fn}\"" }.join(' ')
+      file_list.map { |fn| "\"#{fn}\"" }.join(" ")
     end
 
     def file_list # :nodoc:
-      if ENV['TEST']
-        FileList[ENV['TEST']]
+      if ENV["TEST"]
+        FileList[ENV["TEST"]]
       else
         result = []
         result += @test_files.to_a if @test_files
-        result << @pattern if @pattern
+        result += FileList[@pattern].to_a if @pattern
         result
       end
     end
@@ -170,7 +186,7 @@ module Rake
     end
 
     def rake_loader # :nodoc:
-      find_file('rake/rake_test_loader') or
+      find_file("rake/rake_test_loader") or
         fail "unable to find rake test loader"
     end
 
@@ -183,7 +199,7 @@ module Rake
     end
 
     def rake_include_arg # :nodoc:
-      spec = Gem.loaded_specs['rake']
+      spec = Gem.loaded_specs["rake"]
       if spec.respond_to?(:default_gem?) && spec.default_gem?
         ""
       else
@@ -192,7 +208,7 @@ module Rake
     end
 
     def rake_lib_dir # :nodoc:
-      find_dir('rake') or
+      find_dir("rake") or
         fail "unable to find rake lib"
     end
 

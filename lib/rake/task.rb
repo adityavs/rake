@@ -1,4 +1,5 @@
-require 'rake/invocation_exception_mixin'
+# frozen_string_literal: true
+require "rake/invocation_exception_mixin"
 
 module Rake
 
@@ -141,11 +142,12 @@ module Rake
       @already_invoked = false
     end
 
-    # Clear the existing prerequisites and actions of a rake task.
+    # Clear the existing prerequisites, actions, comments, and arguments of a rake task.
     def clear
       clear_prerequisites
       clear_actions
       clear_comments
+      clear_args
       self
     end
 
@@ -164,6 +166,12 @@ module Rake
     # Clear the existing comments on a rake task.
     def clear_comments
       @comments = []
+      self
+    end
+
+    # Clear the existing arguments on a rake task.
+    def clear_args
+      @arg_names = nil
       self
     end
 
@@ -219,7 +227,7 @@ module Rake
           r.invoke_with_call_chain(prereq_args, invocation_chain)
         end
       end
-      futures.each { |f| f.value }
+      futures.each(&:value)
     end
 
     # Format the trace flags for display.
@@ -240,14 +248,7 @@ module Rake
       end
       application.trace "** Execute #{name}" if application.options.trace
       application.enhance_with_matching_rule(name) if @actions.empty?
-      @actions.each do |act|
-        case act.arity
-        when 1
-          act.call(self)
-        else
-          act.call(self, args)
-        end
-      end
+      @actions.each { |act| act.call(self, args) }
     end
 
     # Is this task needed?
@@ -314,13 +315,13 @@ module Rake
     # Set the names of the arguments for this task. +args+ should be
     # an array of symbols, one for each argument name.
     def set_arg_names(args)
-      @arg_names = args.map { |a| a.to_sym }
+      @arg_names = args.map(&:to_sym)
     end
 
     # Return a string describing the internal state of a task.  Useful for
     # debugging.
     def investigation
-      result = "------------------------------\n"
+      result = "------------------------------\n".dup
       result << "Investigating #{name}\n"
       result << "class: #{self.class}\n"
       result <<  "task needed: #{needed?}\n"
@@ -331,7 +332,7 @@ module Rake
       prereqs.each do |p|
         result << "--#{p.name} (#{p.timestamp})\n"
       end
-      latest_prereq = prerequisite_tasks.map { |pre| pre.timestamp }.max
+      latest_prereq = prerequisite_tasks.map(&:timestamp).max
       result <<  "latest-prerequisite time: #{latest_prereq}\n"
       result << "................................\n\n"
       return result
@@ -382,7 +383,6 @@ module Rake
       # this kind of task.  Generic tasks will accept the scope as
       # part of the name.
       def scope_name(scope, task_name)
-#        (scope + [task_name]).join(':')
         scope.path_with_task_name(task_name)
       end
 

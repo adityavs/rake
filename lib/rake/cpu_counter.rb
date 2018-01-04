@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Rake
 
   # Based on a script at:
@@ -14,7 +15,7 @@ module Rake
     end
 
     begin
-      require 'etc'
+      require "etc"
     rescue LoadError
     else
       if Etc.respond_to?(:nprocessors)

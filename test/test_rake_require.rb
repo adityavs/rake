@@ -1,9 +1,10 @@
-require File.expand_path('../helper', __FILE__)
+# frozen_string_literal: true
+require File.expand_path("../helper", __FILE__)
 
 class TestRakeRequire < Rake::TestCase
   def setup
     super
-    $LOAD_PATH.unshift '.' if jruby17?
+    $LOAD_PATH.unshift "." if jruby17?
   end
 
   def test_can_load_rake_library
@@ -11,7 +12,7 @@ class TestRakeRequire < Rake::TestCase
     app = Rake::Application.new
 
     assert app.instance_eval {
-      rake_require("test2", ['rakelib'], [])
+      rake_require("test2", ["rakelib"], [])
     }
   end
 
@@ -19,7 +20,7 @@ class TestRakeRequire < Rake::TestCase
     rakefile_rakelib
     app = Rake::Application.new
 
-    paths = ['rakelib']
+    paths = ["rakelib"]
     loaded_files = []
     app.rake_require("test2", paths, loaded_files)
 
@@ -34,7 +35,7 @@ class TestRakeRequire < Rake::TestCase
     app = Rake::Application.new
     ex = assert_raises(LoadError) {
       assert app.instance_eval {
-        rake_require("testx", ['rakelib'], [])
+        rake_require("testx", ["rakelib"], [])
       }
     }
     assert_match(/(can *not|can't)\s+find/i, ex.message)

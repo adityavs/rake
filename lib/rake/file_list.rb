@@ -1,6 +1,7 @@
-require 'rake/cloneable'
-require 'rake/file_utils_ext'
-require 'rake/ext/string'
+# frozen_string_literal: true
+require "rake/cloneable"
+require "rake/file_utils_ext"
+require "rake/ext/string"
 
 module Rake
 
@@ -40,8 +41,7 @@ module Rake
 
     # List of array methods (that are not in +Object+) that need to be
     # delegated.
-    ARRAY_METHODS = (Array.instance_methods - Object.instance_methods).
-      map { |n| n.to_s }
+    ARRAY_METHODS = (Array.instance_methods - Object.instance_methods).map(&:to_s)
 
     # List of additional methods that must be delegated.
     MUST_DEFINE = %w[inspect <=>]
@@ -58,8 +58,7 @@ module Rake
       + - & |
     ]
 
-    DELEGATING_METHODS = (ARRAY_METHODS + MUST_DEFINE - MUST_NOT_DEFINE).
-      map { |s| s.to_s }.sort.uniq
+    DELEGATING_METHODS = (ARRAY_METHODS + MUST_DEFINE - MUST_NOT_DEFINE).map(&:to_s).sort.uniq
 
     # Now do the delegation.
     DELEGATING_METHODS.each do |sym|
@@ -282,7 +281,7 @@ module Rake
     #    array.collect { |item| item.ext(newext) }
     #
     # +ext+ is a user added method for the Array class.
-    def ext(newext='')
+    def ext(newext="")
       collect { |fn| fn.ext(newext) }
     end
 
@@ -319,14 +318,14 @@ module Rake
     # Return a new file list that only contains file names from the current
     # file list that exist on the file system.
     def existing
-      select { |fn| File.exist?(fn) }
+      select { |fn| File.exist?(fn) }.uniq
     end
 
     # Modify the current file list so that it contains only file name that
     # exist on the file system.
     def existing!
       resolve
-      @items = @items.select { |fn| File.exist?(fn) }
+      @items = @items.select { |fn| File.exist?(fn) }.uniq
       self
     end
 
@@ -344,7 +343,7 @@ module Rake
     # Convert a FileList to a string by joining all elements with a space.
     def to_s
       resolve
-      self.join(' ')
+      self.join(" ")
     end
 
     # Add matching glob patterns.
@@ -418,7 +417,7 @@ module Rake
     # Yield each file or directory component.
     def each_dir_parent(dir)    # :nodoc:
       old_length = nil
-      while dir != '.' && dir.length != old_length
+      while dir != "." && dir.length != old_length
         yield(dir)
         old_length = dir.length
         dir = File.dirname(dir)

@@ -1,12 +1,100 @@
-=== 11.2.0(dev) / 2016-
+=== 12.3.0
 
-Bug fixes:
+==== Compatibility Changes
+
+* Bump `required_ruby_version` to Ruby 2.0.0. Rake has already
+  removed support for Ruby 1.9.x.
+
+=== Enhancements:
+
+* Support `test-bundled-gems` task on ruby core.
+
+=== 12.2.1
+
+==== Bug fixes
+
+* Fixed to break Capistrano::Application on capistrano3.
+
+=== 12.2.0
+
+==== Enhancements:
+
+* Make rake easier to use as a library
+  Pull request #211 by @drbrain
+* Fix quadratic performance in FileTask#out_of_date?
+  Pull request #224 by @doudou
+* Clarify output when printing nested exception traces
+  Pull request #232 by @urbanautomaton
+
+==== Bug fixes
+
+* Account for a file that match 2 or more patterns.
+  Pull request #231 by @styd
+
+=== 12.1.0
+
+==== Enhancements:
+
+* Added did_you_mean feature for invalid rake task.
+  Pull request #221 by @xtina-starr
+* Enabled to dependency chained by extensions. Pull request #39 by Petr Skocik.
+* Make all of string literals to frozen objects on Ruby 2.4 or later.
+
+==== Bug fixes
+
+* Typo fixes in rakefile.rdoc. Pull request #180 by Yuta Kurotaki.
+* Fix unexpected behavior of file task with dryrun option.
+  Pull request #183 by @aycabta.
+* Make LoadError from running tests more obvious. Pull request #195
+  by Eric Hodel.
+* Fix unexpected TypeError with hash style option. Pull request #202
+  by Kuniaki IGARASHI.
+
+=== 12.0.0
+
+==== Compatibility Changes
+
+* Removed arguments on clear #157 by Jesse Bowes
+* Removed `rake/contrib` packages. These are extracted to `rake-contrib` gem.
+* Removed deprecated method named `last\_comment`.
+
+==== Enhancements:
+
+* Re-use trace option on `cleanup` task. #164 by Brian Henderson
+* Actions adore keyword arguments #174 by Josh Cheek
+* Rake::TaskArguments#key? alias of #has_key? #175 by Paul Annesley
+
+=== 11.3.0 / 2016-09-20
+
+==== Enhancements:
+
+* Remove to reference `Fixnum` constant. Pull request #160 by nobu
+
+=== 11.2.2 / 2016-06-12
+
+==== Bug fixes
+
+* Fix unexpected behavior with multiple dependencies on Rake::TestTask
+
+=== 11.2.1 / 2016-06-12
+
+==== Bug fixes
+
+* Fix regression of dependencies handling on Rake::TestTask. Report #139
+
+=== 11.2.0 / 2016-06-11
+
+==== Bug fixes
 
 * Fix unexpected cut-out behavior on task description using triple dots
   and exclamation. Report #106 from Stephan Kämper and Pull request #134 by Lee
+* Fix empty argument assignment with `with_defaults` option. Pull request #135
+  by bakunyo
+* Ignore to use `hwprefs` on Darwin platform. Use sysctl now. Report #128
 
-Enhancements:
+==== Enhancements
 
+* Spawn options for sh Pull equest #138 by Eric Hodel.
 * Allow to specify dependencies(prerequisites) for Rake::TestTask
   Pull request #117 by Tim Maslyuchenko
 * Use Bundler task instead of hoe for gem release.
@@ -16,39 +104,39 @@ Enhancements:
 
 === 11.1.2 / 2016-03-28
 
-Bug fixes:
+==== Bug fixes
 
 * Remove `-W` option when Rake::TestTask#verbose enabled. It's misunderstanding
   specification change with Rake 11. Partly revert #67
 
 === 11.1.1 / 2016-03-14
 
-Bug fixes:
+==== Bug fixes
 
 * Use `-W` instead of `--verbose` when Rake::TestTask#verbose enabled.
   JRuby doesn't have `--verbose` option.
 
 === 11.1.0 / 2016-03-11
 
-Compatibility Changes:
+==== Compatibility Changes
 
 * Revert to remove `last\_comment`. It will remove Rake 12.
 
 === 11.0.1 / 2016-03-09
 
-Bug fixes:
+==== Bug fixes
 
 * Fixed packaging manifest.
 
 === 11.0.0 / 2016-03-09
 
-Bug fixes:
+==== Bug fixes
 
 * Correctly handle bad encoding in exception messages. Pull request #113
   by Tomer Brisker
 * Fix verbose option at TestTask. Pull request #67 by Mike Blumtritt
 
-Enhancements:
+==== Enhancements
 
 * Make FileList#exclude more analogous to FileList#include.
 * Use IO.open instead of Open3.popen3 for CPU counter.
@@ -62,7 +150,7 @@ Enhancements:
   Pull request #12 by Chris Keathley
 * Use ruby warnings by default. Pull request #97 by Harold Giménez
 
-Compatibility Changes:
+==== Compatibility Changes
 
 * Removed to support Ruby 1.8.x
 * Removed constant named `RAKEVERSION`
@@ -76,7 +164,7 @@ Compatibility Changes:
 
 === 10.5.0 / 2016-01-13
 
-Enhancements:
+==== Enhancements
 
 * Removed monkey patching for Ruby 1.8. Pull request #46 by Pablo Herrero.
 * Inheritance class of Rake::FileList returns always self class.
@@ -84,7 +172,7 @@ Enhancements:
 
 === 10.4.2 / 2014-12-02
 
-Bug fixes:
+==== Bug fixes
 
 * Rake no longer edits ARGV.  This allows you to re-exec rake from a rake
   task.  Pull requset #9 by Matt Palmer.
@@ -95,14 +183,14 @@ Bug fixes:
 
 === 10.4.1 / 2014-12-01
 
-Bug fixes:
+==== Bug fixes
 
 * Reverted fix for #277 as it caused numerous issues for rake users.
   rails/spring issue #366 by Gustavo Dutra.
 
 === 10.4.0 / 2014-11-22
 
-Enhancements:
+==== Enhancements
 
 * Upgraded to minitest 5.  Pull request #292 by Teo Ljungberg.
 * Added support for Pathname in rake tasks.  Pull request #271 by Randy
@@ -113,7 +201,7 @@ Enhancements:
   task.  Issue #277 by Matt Palmer.
 * Etc.nprocessors is used for counting the number of CPUs.
 
-Bug fixes:
+==== Bug fixes
 
 * Updated rake manpage.  Issue #283 by Nathan Long, pull request #291 by
   skittleys.
@@ -126,7 +214,7 @@ Bug fixes:
 
 === 10.3.2 / 2014-05-15
 
-Bug fixes:
+==== Bug fixes
 
 * Rake no longer infinitely loops when showing exception causes that refer to
   each other.  Bug #272 by Chris Bandy.
@@ -134,7 +222,7 @@ Bug fixes:
 
 === 10.3.1 / 2014-04-17
 
-Bug fixes:
+==== Bug fixes
 
 * Really stop reporting an error when cleaning already-deleted files.  Pull
   request #269 by Randy Coulman
@@ -142,13 +230,13 @@ Bug fixes:
 
 === 10.3 / 2014-04-15
 
-Enhancements:
+==== Enhancements
 
 * Added --build-all option to rake which treats all file prerequisites as
   out-of-date.  Pull request #254 by Andrew Gilbert.
 * Added Rake::NameSpace#scope.  Issue #263 by Jon San Miguel.
 
-Bug fixes:
+==== Bug fixes
 
 * Suppress org.jruby package files in rake error messages for JRuby users.
   Issue #213 by Charles Nutter.
@@ -160,13 +248,13 @@ Bug fixes:
 
 === 10.2.2 / 2014-03-27
 
-Bug fixes:
+==== Bug fixes
 
 * Restored Ruby 1.8.7 compatibility
 
 === 10.2.1 / 2014-03-25
 
-Bug fixes:
+==== Bug fixes
 
 * File tasks including a ':' are now top-level tasks again.  Issue #262 by
   Josh Holtrop.
@@ -175,7 +263,7 @@ Bug fixes:
 
 === 10.2.0 / 2014-03-24
 
-Enhancements:
+==== Enhancements
 
 * Rake now requires Ruby 1.9 or newer.  For me, this is a breaking change, but
   it seems that Jim planned to release it with Rake 10.2.  See also pull
@@ -193,7 +281,7 @@ Enhancements:
   Filip Hrbek.
 * Rake now prints the exception class on errors.  Patch #251 by David Cornu.
 
-Bug fixes:
+==== Bug fixes
 
 * Fixed typos.  Pull request #256 by Valera Rozuvan, #250 via Jake Worth, #260
   by Zachary Scott.
@@ -205,11 +293,10 @@ Bug fixes:
 * Fixed bug in can\_detect\_signals? in test.  Patch from #243 by Alexey
   Borzenkov.
 
-=== 10.1.1 and earlier
+=== 10.1.1
 
-Additions to the old CHANGES file were not made consistently so some
-versions are missing from this file.  These changes are usually described in
-the individual release notes files.
+* Use http://github.com/jimweirich/rake instead of http://rake.rubyforge.org for
+  canonical project url.
 
 === 10.1.0
 
@@ -350,7 +437,7 @@ we'll repeat the changes for versions 0.9.3 through 0.9.5 here.
   programatically add rake task libraries.
 
 * You can specific backtrace suppression patterns (see
-  --supress-backtrace)
+  --suppress-backtrace)
 
 * Directory tasks can now take prerequisites and actions
 
@@ -598,7 +685,7 @@ we'll repeat the changes for version 0.9.3 here.
   programatically add rake task libraries.
 
 * You can specific backtrace suppression patterns (see
-  --supress-backtrace)
+  --suppress-backtrace)
 
 * Directory tasks can now take prerequisites and actions
 
@@ -808,7 +895,7 @@ a number of bug fixes.
   programatically add rake task libraries.
 
 * You can specific backtrace suppression patterns (see
-  --supress-backtrace)
+  --suppress-backtrace)
 
 * Directory tasks can now take prerequisites and actions
 
@@ -1380,7 +1467,7 @@ The first argument is still the name of the task (:name in this case).
 The next to argumements are the names of the parameters expected by
 :name (:first_name and :last_name in the example).
 
-To access the values of the paramters, the block defining the task
+To access the values of the parameters, the block defining the task
 behaviour can now accept a second parameter:
 
    task :name, :first_name, :last_name do |t, args|
@@ -1483,7 +1570,7 @@ The first argument is still the name of the task (:name in this case).
 The next to argumements are the names of the parameters expected by
 :name (:first_name and :last_name in the example).
 
-To access the values of the paramters, the block defining the task
+To access the values of the parameters, the block defining the task
 behaviour can now accept a second parameter:
 
    task :name, :first_name, :last_name do |t, args|
@@ -1703,7 +1790,7 @@ are, I hope you enjoy them.
 * RDoc defaults to internal (in-process) invocation.  The old behavior
   is still available by setting the +external+ flag to true.
 * Rakefiles are now loaded with the expanded path to prevent
-  accidental polution from the Ruby load path.
+  accidental pollution from the Ruby load path.
 * Task objects my now be used in prerequisite lists directly.
 * Task objects (in addition to task names) may now be included in the
   prerequisite list of a task.
@@ -1716,7 +1803,7 @@ are, I hope you enjoy them.
 ===== Namespaces
 
 Tasks can now be nested inside their own namespaces.  Tasks within one
-namespace will not accidently interfer with tasks named in a different
+namespace will not accidentally interfer with tasks named in a different
 namespace.
 
 For example:
@@ -1774,7 +1861,7 @@ As usual, it was input from users that drove a alot of these changes.
 The following people either contributed patches, made suggestions or
 made otherwise helpful comments.  Thanks to ...
 
-* Doug Young (inspriation for the parallel task)
+* Doug Young (inspiration for the parallel task)
 * David Heinemeier Hansson (for --trace message enhancement and for
   pushing for namespace support).
 * Ludvig Omholt (for the openAFS fix)
