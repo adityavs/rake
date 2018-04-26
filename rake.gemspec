@@ -5,7 +5,6 @@ require 'rake/version'
 Gem::Specification.new do |s|
   s.name = "rake".freeze
   s.version = Rake::VERSION
-  s.date = "2017-11-15"
   s.authors = ["Hiroshi SHIBATA".freeze, "Eric Hodel".freeze, "Jim Weirich".freeze]
   s.email = ["hsbt@ruby-lang.org".freeze, "drbrain@segment7.net".freeze, "".freeze]
 
@@ -24,7 +23,7 @@ Rake has the following features:
   s.homepage = "https://github.com/ruby/rake".freeze
   s.licenses = ["MIT".freeze]
 
-  s.files = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) } -
+  s.files = %x[git ls-files -z].split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) } -
             %w[.rubocop.yml .travis.yml appveyor.yml]
   s.bindir = "exe"
   s.executables = s.files.grep(%r{^exe/}) { |f| File.basename(f) }
